@@ -7,7 +7,7 @@
 #include <framework/util/plugin_util.h>
 
 #include <puma/interface/common/nr_plugin_generic.h>
-#include <puma/interface/puma/nr_plugin_Puma.h>
+#include <puma/interface/puma/nr_plugin_puma.h>
 #include <puma/source/log.h>
 
 using namespace framework::util;

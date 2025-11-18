@@ -31,7 +31,7 @@ class Logger : public framework::util::Singleton<Logger> {
 }  // namespace puma
  
 #define PUMA_LOG_TRACE(format, ...) \
-	if (puma::Logger::GetInstance()->IsLogAllLevel()) { \
+	if (puma::Logger::GetInstance()->IsLogAllLevel())  \
 		puma::Logger::GetInstance()->GetLogger()->trace(format, ##__VA_ARGS__);
 #define PUMA_LOG_TRACE2(format1, format2, ...) \
 { \
@@ -41,7 +41,7 @@ class Logger : public framework::util::Singleton<Logger> {
 		puma::Logger::GetInstance()->GetLogger()->trace(format.c_str(), ##__VA_ARGS__); \
 } 
 #define PUMA_LOG_DEBUG(format, ...) \
-	if (puma::Logger::GetInstance()->IsLogAllLevel()) { \
+	if (puma::Logger::GetInstance()->IsLogAllLevel())  \
 		puma::Logger::GetInstance()->GetLogger()->debug(format, ##__VA_ARGS__);
 #define PUMA_LOG_INFO(format, ...) \
     puma::Logger::GetInstance()->GetLogger()->info(format, ##__VA_ARGS__);
