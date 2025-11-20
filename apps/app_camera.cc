@@ -1,4 +1,5 @@
 #include <puma/util/log.h>
+#include <puma/env/system_config.h>
 
 #if !defined(PUMA_SYSTEM_ANDROID)
 #include <opencv2/highgui.hpp>

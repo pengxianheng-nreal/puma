@@ -37,7 +37,6 @@ endif() # end if ANDROID
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable")
 
-if(ANDROID OR (UNIX AND NOT APPLE))
-    APP_TARGET(app_camera app_camera.cc app_base)
-endif()
+APP_TARGET(app_camera app_camera.cc app_base)
+
 

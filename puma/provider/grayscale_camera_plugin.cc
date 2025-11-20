@@ -228,18 +228,34 @@ int32_t GrayscaleCameraPlugin::StartGrayscaleCamera() {
         return NR_PLUGIN_RESULT_SUCCESS;
     }
 
+#if defined(PUMA_SYSTEM_ANDROID) || defined(PUMA_SYSTEM_LINUX)
     camera_type_ = CameraFactory::CameraType::CAMERA_V4L2;
+    //camera_type_ = CameraFactory::CameraType::CAMERA_UVC;
+#elif defined(PUMA_SYSTEM_MACOS)
+    camera_type_ = CameraFactory::CameraType::CAMERA_MAC;
+#else
+    camera_type_ = CameraFactory::CameraType::CAMERA_DSHOW;
+#endif
+
     driver_ = CameraFactory::createDevice(camera_type_, std::bind(&GrayscaleCameraPlugin::process, this, std::placeholders::_1));
     if(driver_ == nullptr) {
         PUMA_LOG_ERROR("StartGrayscaleCamera createDevice failed!");
         return  NR_PLUGIN_RESULT_FAILURE;
     }
+
     driver_->SetDeviceType(DEVICE_TYPE_HYLLA_M);
     std::vector<std::string> gray_camera_name;
     gray_camera_name.emplace_back("UVC Camera 1"); //gray camera name
     driver_->addProductName(gray_camera_name);
+    //driver_->addProductID(0x3318, 0x043a); //hylla
     driver_->setCameraProperties(*camera_info_);
     driver_->setIOMethod(CameraDriver::IO_Method::IO_METHOD_MMAP);
+
+    if (!driver_->init()) {
+        PUMA_LOG_ERROR("GrayscaleCameraPlugin driver init failed");
+        return  NR_PLUGIN_RESULT_FAILURE;
+    }
+
     if (driver_->start()) {
         return NR_PLUGIN_RESULT_SUCCESS;
     }

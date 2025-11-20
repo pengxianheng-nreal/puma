@@ -125,32 +125,32 @@ int CameraUvc::uvcStartStream() {
     enum uvc_frame_format uvc_fmt = UVC_FRAME_FORMAT_COUNT;
     uvc_error_t res = UVC_ERROR_OTHER;
     if (info_.uvc_fmt == 0) {
-        info_.uvc_fmt = UVC_FRAME_FORMAT_YUYV;
+        info_.uvc_fmt = UVC_FRAME_FORMAT_GRAY8;
     }
 
     do {
-        if(device_type_ == DEVICE_TYPE_FLORA) {
-            const uvc_format_desc_t *format_desc = uvc_get_format_descs(dev_handle_);
-            if(format_desc) {
-                GetSupportFrameInfo(format_desc);
-            }
-            else {
-                PUMA_LOG_TRACE("uvcStartStream format_desc is nullptr!");
-            }
-            PUMA_LOG_INFO("resolution size:{}",support_frame_infos_.size());
-            if(!info_.height_from_config && support_frame_infos_.size() > 0) {
-                uint16_t min_height = support_frame_infos_[0].height;
-                uint16_t fps =  support_frame_infos_[0].fps;
-                for(const auto& image_info : support_frame_infos_) {
-                    if(image_info.height < min_height) {
-                        min_height = image_info.height;
-                        fps = image_info.fps;
-                    }
-                }
-                info_.height = min_height;
-                info_.frame_rate = fps;
-            }
+
+        const uvc_format_desc_t *format_desc = uvc_get_format_descs(dev_handle_);
+        if(format_desc) {
+            GetSupportFrameInfo(format_desc);
         }
+        else {
+            PUMA_LOG_TRACE("uvcStartStream format_desc is nullptr!");
+        }
+        PUMA_LOG_INFO("resolution size:{}",support_frame_infos_.size());
+        if(!info_.height_from_config && support_frame_infos_.size() > 0) {
+            uint16_t min_height = support_frame_infos_[0].height;
+            uint16_t fps =  support_frame_infos_[0].fps;
+            for(const auto& image_info : support_frame_infos_) {
+                if(image_info.height < min_height) {
+                    min_height = image_info.height;
+                    fps = image_info.fps;
+                }
+            }
+            info_.height = min_height;
+            info_.frame_rate = fps;
+        }
+        
 
         uvc_fmt = static_cast<uvc_frame_format>(info_.uvc_fmt);
         height = info_.height;
@@ -295,6 +295,7 @@ int CameraUvc::uvcOpen() {
     }
     cam_proc_status_ = UVC_CAM_PROC_INIT;
 
+    PUMA_LOG_DEBUG("product_id_ size:{}", product_id_.size());
     if (info_.usb_fd <= 0) {
         for (auto it : product_id_) {
             PUMA_LOG_TRACE("CameraUvc filtering device of vid: {} pid: {}",
