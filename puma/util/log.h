@@ -23,7 +23,7 @@ class Logger : public framework::util::Singleton<Logger> {
 	void SetSection(const std::string &section) { section_ = section; }
 
    private:
-    bool log_all_level_{false};
+    bool log_all_level_{true};
 	std::string section_{"Puma"};
 };
 

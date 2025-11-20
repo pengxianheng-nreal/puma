@@ -4,9 +4,9 @@
 
 #include <framework/util/util.h>
 
-#include <puma/source/log.h>
-#include <puma/interface/puma/nr_plugin_Puma.h>
-#include <puma/env/export.h>
+#include <puma/util/log.h>
+#include <puma/interface/puma/nr_plugin_puma.h>
+#include <puma/env//export.h>
 
 /// mock NRSDK
 static NRInterfaces s_interfaces;

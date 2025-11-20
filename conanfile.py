@@ -1,4 +1,7 @@
 from conan import ConanFile
+from conan.tools.files import copy
+from conan.tools.cmake import CMake
+import os
 
 class Project(ConanFile):
 
@@ -15,6 +18,7 @@ class Project(ConanFile):
     # difference between project:
     def requirements(self):
         self.requires(super().override_require("framework/develop"), run=True)
+        self.requires(super().override_require("opencv/4.5.5"), transitive_headers=False, transitive_libs=False)
         self.requires("doctest/2.4.11")
         # self.requires("eigen/3.3.7")
 
@@ -23,3 +27,9 @@ class Project(ConanFile):
         self.cpp_info.set_property("cmake_file_name", "puma")
         self.cpp_info.set_property("cmake_target_name", "puma::puma")
         self.cpp_info.libs = ["puma_static"]
+        if self.settings.os in ["Android", "Linux"]:
+           self.cpp_info.libs.append("nr_libusb")
+        if self.settings.os == "Macos":
+            self.cpp_info.frameworks.extend(["IOKit","CoreFoundation","AppKit","CoreServices","SecurityFoundation","AVFoundation","CoreMedia","CoreVideo"])
+        if self.settings.os == "Windows":
+            self.cpp_info.system_libs.extend(["setupapi", "hid"])

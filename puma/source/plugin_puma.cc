@@ -1,6 +1,6 @@
-#include <puma/env/system_config.h>
-#include <puma/env/export.h>
-#include <puma/env/version.h>
+#include <puma/env//system_config.h>
+#include <puma/env//export.h>
+#include <puma/env//version.h>
 
 #include <framework/util/android_globals.h>
 #include <framework/util/util.h>
@@ -8,7 +8,7 @@
 
 #include <puma/interface/common/nr_plugin_generic.h>
 #include <puma/interface/puma/nr_plugin_puma.h>
-#include <puma/source/log.h>
+#include <puma/util/log.h>
 
 using namespace framework::util;
 
@@ -33,7 +33,7 @@ static std::unique_ptr<NRGenericInterface> s_generic_interface = nullptr;
 static std::unique_ptr<NRPumaInterface> s_interface = nullptr;
 static uint32_t s_Puma_variable;
 
-EXAMPLE_EXTERN_C_BEGIN
+PUMA_EXTERN_C_BEGIN
 void NRPluginLoad_Puma(NRInterfaces* interfaces)
 {
 	s_generic_interface = framework::util::GetInterface<NRGenericInterface>(interfaces);
@@ -51,20 +51,20 @@ void NRPluginLoad_Puma(NRInterfaces* interfaces)
         &PumaUnregister,
     };
 
-    s_interface->RegisterLifecycleProvider("nr_puma_id", EXAMPLE_VERSION_STRING, &provider, sizeof(provider));
+    s_interface->RegisterLifecycleProvider("nr_puma_id", PUMA_VERSION_STRING, &provider, sizeof(provider));
 }
 
 void NRPluginUnload_Puma()
 {
 }
-EXAMPLE_EXTERN_C_END
+PUMA_EXTERN_C_END
 
 /*
  * All log function must be execute after this function has been called.
  * Because android log require android environment.
  */
 void InitAndroidEnvironment() {
-#ifdef EXAMPLE_SYSTEM_ANDROID
+#ifdef PUMA_SYSTEM_ANDROID
 	_JavaVM* java_vm = nullptr;
 	void* obj_activity = nullptr;
 	void* extra_class_loader = nullptr;
